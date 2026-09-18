@@ -1,0 +1,3 @@
+import { describe, expect, it } from "vitest";
+import { bookingSchema, serviceSchema } from "@/lib/validation/schemas";
+describe("input validation", () => { it("requires realistic service duration", () => { expect(serviceSchema.safeParse({ name: "Corte", durationMinutes: 30 }).success).toBe(true); expect(serviceSchema.safeParse({ name: "x", durationMinutes: 2 }).success).toBe(false); }); it("requires customer identity", () => { expect(bookingSchema.safeParse({ businessSlug: "demo", serviceId: "s", employeeId: "e", startAt: "2026-01-01T10:00:00Z", name: "Ana", phone: "123456" }).success).toBe(true); }); });

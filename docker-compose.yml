@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: turnosflow
+      POSTGRES_PASSWORD: turnosflow
+      POSTGRES_DB: turnosflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - turnosflow_pgdata:/var/lib/postgresql/data
+volumes:
+  turnosflow_pgdata:
