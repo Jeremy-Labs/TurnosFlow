@@ -18,7 +18,11 @@ Auth.js y el adaptador de Prisma son la integración prevista. La sesión identi
 
 ## Booking y doble reserva
 
-Los slots se generan al vuelo a partir de bloques, duración y citas existentes; no se persisten slots. La creación pública valida negocio, servicio, profesional y pertenencia, calcula `endAt`, revisa el solapamiento en servidor y ejecuta cliente+cita en una transacción Serializable. En PostgreSQL, una migración posterior puede añadir una exclusión GiST como defensa adicional; la transacción y el índice de citas son el MVP.
+Los slots se generan al vuelo a partir de bloques, duración y citas existentes; no se persisten slots. La creación pública valida que la hora sea futura, resuelve negocio+servicio+profesional+relación EmployeeService en el mismo tenant, deriva el día local del negocio, calcula slots y exige coincidencia exacta antes de crear cliente+cita. Todo ocurre en una transacción Serializable. Un error de serialización se reintenta una vez y luego devuelve un conflicto legible al cliente.
+
+## Hardening de timezone y autenticación
+
+El motor trata la fecha elegida como una fecha local de `Business.timezone`, calcula el inicio y siguiente inicio de día en esa zona y consulta citas por solapamiento. Esto evita asumir que un día dura 24 horas o empieza a medianoche UTC. La UI formatea las citas con la timezone del negocio. Las contraseñas locales se guardan con bcrypt; el único password de demo es creado por el seed de desarrollo.
 
 ## Decisiones y límites
 

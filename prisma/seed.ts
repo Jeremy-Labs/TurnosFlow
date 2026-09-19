@@ -1,8 +1,10 @@
 import { PrismaClient, AppointmentStatus, MembershipRole } from "@prisma/client";
+import { hashPassword } from "../lib/passwords";
 const prisma = new PrismaClient();
 
 async function main() {
-  const owner = await prisma.user.upsert({ where: { email: "demo@turnosflow.local" }, update: {}, create: { name: "Demo Owner", email: "demo@turnosflow.local" } });
+  const demoPasswordHash = await hashPassword("demo");
+  const owner = await prisma.user.upsert({ where: { email: "demo@turnosflow.local" }, update: { passwordHash: demoPasswordHash }, create: { name: "Demo Owner", email: "demo@turnosflow.local", passwordHash: demoPasswordHash } });
   const business = await prisma.business.upsert({ where: { slug: "barberia-central" }, update: {}, create: { name: "Barbería Central", slug: "barberia-central", description: "Barbería de barrio con reserva online", phone: "+34 600 123 456", email: "hola@barberia-central.local", timezone: "Europe/Madrid" } });
   await prisma.membership.upsert({ where: { userId_businessId: { userId: owner.id, businessId: business.id } }, update: { role: MembershipRole.OWNER }, create: { userId: owner.id, businessId: business.id, role: MembershipRole.OWNER } });
   const [corte, barba, combo] = await Promise.all([

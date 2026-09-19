@@ -34,6 +34,7 @@ npm run dev
 ```
 
 Abrir `http://localhost:3000`. La demo pública está en `http://localhost:3000/b/barberia-central`.
+El acceso de desarrollo es `demo@turnosflow.local` con contraseña `demo`; el seed la guarda como hash bcrypt y no debe reutilizarse fuera de desarrollo.
 
 ## Database
 
@@ -48,12 +49,13 @@ Todos los timestamps se guardan en UTC; `Business.timezone` define la interpreta
 
 ```bash
 npm test
+npm run test:integration
 npm run test:e2e
 npm run lint
 npm run build
 ```
 
-Los tests unitarios cubren slots, superposición, validaciones, permisos y timezone. Playwright cubre el recorrido público principal cuando la base y el servidor están disponibles.
+Los tests unitarios cubren slots, superposición, validaciones, password hashing y timezone. La prueba de concurrencia y aislamiento requiere PostgreSQL: `RUN_POSTGRES_TESTS=1 npm test`. Playwright cubre el recorrido público principal cuando la base y el servidor están disponibles.
 
 ## Demo data
 
