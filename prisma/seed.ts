@@ -8,6 +8,8 @@ async function main() {
   const owner = await prisma.user.upsert({ where: { email: "demo@turnosflow.local" }, update: { passwordHash: demoPasswordHash }, create: { name: "Demo Owner", email: "demo@turnosflow.local", passwordHash: demoPasswordHash } });
   const business = await prisma.business.upsert({ where: { slug: "barberia-central" }, update: {}, create: { name: "Barbería Central", slug: "barberia-central", description: "Barbería de barrio con reserva online", phone: "+34 600 123 456", email: "hola@barberia-central.local", timezone: "Europe/Madrid" } });
   await prisma.membership.upsert({ where: { userId_businessId: { userId: owner.id, businessId: business.id } }, update: { role: MembershipRole.OWNER }, create: { userId: owner.id, businessId: business.id, role: MembershipRole.OWNER } });
+  const secondBusiness = await prisma.business.upsert({ where: { slug: "centro-estetico-demo" }, update: {}, create: { name: "Centro Estético Demo", slug: "centro-estetico-demo", description: "Negocio demo para validar multiempresa", timezone: "Europe/Madrid" } });
+  await prisma.membership.upsert({ where: { userId_businessId: { userId: owner.id, businessId: secondBusiness.id } }, update: { role: MembershipRole.ADMIN }, create: { userId: owner.id, businessId: secondBusiness.id, role: MembershipRole.ADMIN } });
   const [corte, barba, combo] = await Promise.all([
     prisma.service.upsert({ where: { id: "demo-corte" }, update: {}, create: { id: "demo-corte", businessId: business.id, name: "Corte", durationMinutes: 30, price: 15 } }),
     prisma.service.upsert({ where: { id: "demo-barba" }, update: {}, create: { id: "demo-barba", businessId: business.id, name: "Barba", durationMinutes: 20, price: 10 } }),

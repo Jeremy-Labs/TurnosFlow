@@ -38,9 +38,9 @@ describePostgres("PostgreSQL booking integrity", () => {
     const b = await makeBusiness(`${suffix}-b`, `${suffix}-b@example.test`);
     const customer = await prisma.customer.create({ data: { businessId: b.business.id, name: "Cliente B", phone: "+34222222222" } });
     const appointment = await prisma.appointment.create({ data: { businessId: b.business.id, customerId: customer.id, employeeId: b.employee.id, serviceId: b.service.id, startAt: new Date("2030-01-07T08:00:00.000Z"), endAt: new Date("2030-01-07T08:30:00.000Z") } });
-    expect(await prisma.appointment.findFirst({ where: appointmentMemberScope(a.user.email, appointment.id) })).toBeNull();
-    await expect(updateAppointmentStatusForMember(a.user.email, appointment.id, "CANCELLED")).rejects.toBeInstanceOf(PrivateResourceNotFoundError);
-    await expect(updateAppointmentStatusForMember(a.user.email, appointment.id, "CONFIRMED")).rejects.toBeInstanceOf(PrivateResourceNotFoundError);
+    expect(await prisma.appointment.findFirst({ where: appointmentMemberScope(a.user.id, appointment.id) })).toBeNull();
+    await expect(updateAppointmentStatusForMember(a.user.id, appointment.id, "CANCELLED")).rejects.toBeInstanceOf(PrivateResourceNotFoundError);
+    await expect(updateAppointmentStatusForMember(a.user.id, appointment.id, "CONFIRMED")).rejects.toBeInstanceOf(PrivateResourceNotFoundError);
     expect((await prisma.appointment.findUniqueOrThrow({ where: { id: appointment.id } })).status).toBe("PENDING");
   });
 });

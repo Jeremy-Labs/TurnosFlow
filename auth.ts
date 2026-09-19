@@ -3,6 +3,9 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./lib/prisma";
 import { verifyPassword } from "./lib/passwords";
+import { authCallbacks } from "./lib/auth-session";
+
+export { authCallbacks } from "./lib/auth-session";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -17,4 +20,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   })],
   session: { strategy: "jwt" },
+  callbacks: authCallbacks,
 });
