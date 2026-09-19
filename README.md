@@ -24,8 +24,8 @@ Next.js, TypeScript, Tailwind CSS, Prisma, PostgreSQL, Auth.js, Zod, Vitest y Pl
 
 Requisitos: Node.js 20+, npm y Docker Desktop para PostgreSQL.
 
-```bash
-npm install
+```powershell
+npm ci
 Copy-Item .env.example .env
 docker compose up -d db
 npm run db:push
@@ -47,7 +47,7 @@ Todos los timestamps se guardan en UTC; `Business.timezone` define la interpreta
 
 ## Tests
 
-```bash
+```powershell
 npm test
 npm run test:integration
 npm run test:e2e
@@ -55,7 +55,23 @@ npm run lint
 npm run build
 ```
 
-Los tests unitarios cubren slots, superposición, validaciones, password hashing y timezone. La prueba de concurrencia y aislamiento requiere PostgreSQL: `RUN_POSTGRES_TESTS=1 npm test`. Playwright cubre el recorrido público principal cuando la base y el servidor están disponibles.
+Los tests unitarios cubren slots, superposición, validaciones, password hashing y timezone. `npm run test:integration` ejecuta concurrencia e aislamiento contra PostgreSQL. `npm run test:e2e` requiere PostgreSQL preparado con `npm run db:push` y datos demo con `npm run db:seed`; prueba una reserva pública completa.
+
+## Validación antes de enviar cambios
+
+Con Docker Desktop iniciado:
+
+```powershell
+npm ci
+docker compose up -d db
+npm run db:push
+npm test
+npm run test:integration
+npm run db:seed
+npm run lint
+npm run build
+npm run test:e2e
+```
 
 ## Demo data
 

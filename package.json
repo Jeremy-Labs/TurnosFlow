@@ -7,8 +7,8 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "vitest run",
-    "test:integration": "cross-env RUN_POSTGRES_TESTS=1 vitest run tests/integration",
+    "test": "prisma generate && vitest run",
+    "test:integration": "prisma generate && cross-env RUN_POSTGRES_TESTS=1 vitest run tests/integration",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "db:generate": "prisma generate",
@@ -36,6 +36,7 @@
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/node": "^22.10.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
     "cross-env": "^7.0.3",
