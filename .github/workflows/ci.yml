@@ -29,8 +29,8 @@ jobs:
     env:
       DATABASE_URL: postgresql://turnosflow:turnosflow@localhost:5432/turnosflow_ci?schema=public
       AUTH_SECRET: ci-only-test-secret-not-for-production
-      AUTH_URL: http://127.0.0.1:3000
-      NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+      AUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
