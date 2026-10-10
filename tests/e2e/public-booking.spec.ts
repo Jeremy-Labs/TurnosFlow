@@ -25,4 +25,24 @@ test("a customer completes the critical public booking flow", async ({ page }) =
   await page.getByPlaceholder("Email opcional").fill("cliente-e2e@example.test");
   await page.getByRole("button", { name: "Confirmar reserva" }).click();
   await expect(page.getByText("Reserva confirmada para")).toBeVisible();
+
+  // Navigate to Manage Booking
+  const manageLink = page.getByRole("link", { name: "Ver o gestionar mi reserva →" });
+  await expect(manageLink).toBeVisible();
+  await manageLink.click();
+
+  await expect(page).toHaveURL(/\/b\/barberia-central\/reserva\/[\w-]+$/);
+  await expect(page.getByText("Detalle de Reserva")).toBeVisible();
+  await expect(page.getByText("Barbería Central")).toBeVisible();
+  await expect(page.getByText("Cliente E2E")).toBeVisible();
+  await expect(page.getByText("PENDIENTE")).toBeVisible();
+
+  // Cancel booking
+  page.once("dialog", async (dialog) => {
+    await dialog.accept();
+  });
+  await page.getByRole("button", { name: "Cancelar reserva" }).click();
+
+  await expect(page.getByText("Tu reserva ha sido cancelada correctamente.")).toBeVisible();
+  await expect(page.getByText("CANCELADA")).toBeVisible();
 });
