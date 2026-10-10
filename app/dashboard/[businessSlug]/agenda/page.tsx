@@ -63,6 +63,12 @@ export default async function AgendaPage({
               <span className="text-teal-700 font-semibold border-b-2 border-teal-700 pb-1">
                 Agenda
               </span>
+              <Link
+                href={`/dashboard/${business.slug}/clientes`}
+                className="text-slate-600 transition hover:text-slate-900"
+              >
+                Clientes
+              </Link>
             </div>
           </div>
           <LogoutButton />
@@ -109,6 +115,7 @@ export default async function AgendaPage({
             <AgendaTable
               appointments={appointments}
               timezone={business.timezone}
+              businessSlug={business.slug}
             />
           </div>
         </div>

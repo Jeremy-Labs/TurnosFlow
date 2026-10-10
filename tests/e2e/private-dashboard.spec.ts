@@ -60,3 +60,38 @@ test("an authenticated user views and filters the admin agenda", async ({ page }
   await expect(page).toHaveURL(/\/dashboard\/barberia-central\/agenda$/);
 });
 
+test("an authenticated user views customers list and appointment history", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByPlaceholder("Email").fill("demo@turnosflow.local");
+  await page.getByPlaceholder("Contraseña").fill("demo");
+  await page.getByRole("button", { name: "Entrar" }).click();
+  await expect(page).toHaveURL(/\/dashboard\/seleccionar-negocio$/);
+
+  await page.getByRole("link", { name: /Barbería Central/ }).click();
+  await expect(page).toHaveURL(/\/dashboard\/barberia-central$/);
+
+  // Navigate to Clientes
+  await page.getByRole("link", { name: "Clientes" }).first().click();
+  await expect(page).toHaveURL(/\/dashboard\/barberia-central\/clientes$/);
+  await expect(page.getByRole("heading", { name: "Gestión de Clientes" })).toBeVisible();
+
+  // Search or locate demo customer Lucía García
+  await expect(page.getByText("Lucía García")).toBeVisible();
+  const customerRow = page.getByTestId("customer-row").filter({ hasText: "Lucía García" });
+  await expect(customerRow).toBeVisible();
+  await expect(customerRow.getByText(/\+34 611 222 333/)).toBeVisible();
+
+  // Open customer detail / history
+  await customerRow.getByRole("link", { name: "Lucía García" }).click();
+  await expect(page).toHaveURL(/\/dashboard\/barberia-central\/clientes\/demo-customer$/);
+  await expect(page.getByRole("heading", { name: "Lucía García" })).toBeVisible();
+  await expect(page.getByText("Información de contacto")).toBeVisible();
+  await expect(page.getByText("Historial de turnos")).toBeVisible();
+
+  // Check appointment history row contains Corte
+  const appointmentHistoryRow = page.getByTestId("customer-appointment-row").filter({ hasText: "Corte" });
+  await expect(appointmentHistoryRow).toBeVisible();
+  await expect(appointmentHistoryRow.getByText(/Profesional: Juan/)).toBeVisible();
+});
+
+

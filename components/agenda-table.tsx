@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AppointmentStatus as AppointmentStatusEnum } from "@prisma/client";
 import { AppointmentStatus } from "@/components/appointment-status";
 import { formatBusinessTime } from "@/lib/domain/availability";
@@ -29,9 +30,10 @@ export interface AgendaAppointmentItem {
 interface AgendaTableProps {
   appointments: AgendaAppointmentItem[];
   timezone: string;
+  businessSlug?: string;
 }
 
-export function AgendaTable({ appointments, timezone }: AgendaTableProps) {
+export function AgendaTable({ appointments, timezone, businessSlug }: AgendaTableProps) {
   if (appointments.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-slate-200 bg-white p-12 text-center shadow-sm">
@@ -71,9 +73,18 @@ export function AgendaTable({ appointments, timezone }: AgendaTableProps) {
                   <span className="inline-flex items-center rounded-md bg-teal-50 px-2 py-1 text-xs font-semibold text-teal-800">
                     {startTime} - {endTime}
                   </span>
-                  <span className="font-semibold text-slate-900">
-                    {appointment.customer.name}
-                  </span>
+                  {businessSlug ? (
+                    <Link
+                      href={`/dashboard/${businessSlug}/clientes/${appointment.customer.id}`}
+                      className="font-semibold text-slate-900 transition hover:text-teal-700 hover:underline"
+                    >
+                      {appointment.customer.name}
+                    </Link>
+                  ) : (
+                    <span className="font-semibold text-slate-900">
+                      {appointment.customer.name}
+                    </span>
+                  )}
                 </div>
 
                 <div className="text-sm text-slate-600">
