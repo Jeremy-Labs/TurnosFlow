@@ -8,6 +8,7 @@ import { authCallbacks } from "./lib/auth-session";
 export { authCallbacks } from "./lib/auth-session";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.AUTH_SECRET ?? "dev-insecure-secret-turnosflow-e2e",
   adapter: PrismaAdapter(prisma),
   providers: [Credentials({
     name: "Credenciales",
