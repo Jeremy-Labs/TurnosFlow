@@ -44,7 +44,8 @@ test("an authenticated user views and filters the admin agenda", async ({ page }
 
   await expect(page).toHaveURL(/date=2030-01-07/);
   await expect(page.getByText("Lucía García")).toBeVisible();
-  await expect(page.getByText(/Corte/)).toBeVisible();
+  const appointmentItem = page.locator("div").filter({ hasText: "Lucía García" }).first();
+  await expect(appointmentItem.getByText(/Corte/)).toBeVisible();
   await expect(page.getByText(/Profesional: Juan/)).toBeVisible();
   await expect(page.getByText("10:00 - 10:30")).toBeVisible();
 
