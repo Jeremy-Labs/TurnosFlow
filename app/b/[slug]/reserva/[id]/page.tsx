@@ -29,6 +29,10 @@ export default async function ManagePublicBookingPage({
     ...appointment,
     startAt: appointment.startAt.toISOString(),
     endAt: appointment.endAt.toISOString(),
+    service: {
+      ...appointment.service,
+      price: appointment.service.price ? Number(appointment.service.price) : null,
+    },
   };
 
   return (

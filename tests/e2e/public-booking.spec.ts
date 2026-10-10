@@ -33,7 +33,7 @@ test("a customer completes the critical public booking flow", async ({ page }) =
 
   await expect(page).toHaveURL(/\/b\/barberia-central\/reserva\/[\w-]+$/);
   await expect(page.getByText("Detalle de Reserva")).toBeVisible();
-  await expect(page.getByText("Barbería Central")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Barbería Central" })).toBeVisible();
   await expect(page.getByText("Cliente E2E")).toBeVisible();
   await expect(page.getByText("PENDIENTE")).toBeVisible();
 
