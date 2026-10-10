@@ -43,11 +43,11 @@ test("an authenticated user views and filters the admin agenda", async ({ page }
   await page.getByRole("button", { name: "Filtrar turnos" }).click();
 
   await expect(page).toHaveURL(/date=2030-01-07/);
-  await expect(page.getByText("Lucía García")).toBeVisible();
-  const appointmentItem = page.locator("div").filter({ hasText: "Lucía García" }).first();
-  await expect(appointmentItem.getByText(/Corte/)).toBeVisible();
-  await expect(page.getByText(/Profesional: Juan/)).toBeVisible();
-  await expect(page.getByText("10:00 - 10:30")).toBeVisible();
+  const appointmentRow = page.getByTestId("appointment-row").filter({ hasText: "Lucía García" });
+  await expect(appointmentRow).toBeVisible();
+  await expect(appointmentRow.getByText(/Corte/)).toBeVisible();
+  await expect(appointmentRow.getByText(/Profesional: Juan/)).toBeVisible();
+  await expect(appointmentRow.getByText("10:00 - 10:30")).toBeVisible();
 
   // Filter by a professional that has no appointments on that date (María)
   await page.getByLabel("Profesional").selectOption("demo-maria");

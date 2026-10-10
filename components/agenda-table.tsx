@@ -63,6 +63,7 @@ export function AgendaTable({ appointments, timezone }: AgendaTableProps) {
           return (
             <div
               key={appointment.id}
+              data-testid="appointment-row"
               className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex flex-col gap-1">
