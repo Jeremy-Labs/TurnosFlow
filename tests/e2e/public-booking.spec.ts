@@ -35,7 +35,8 @@ test("a customer completes the critical public booking flow", async ({ page }) =
   await expect(page.getByText("Detalle de Reserva")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Barbería Central" })).toBeVisible();
   await expect(page.getByText("Cliente E2E")).toBeVisible();
-  await expect(page.getByText("PENDIENTE")).toBeVisible();
+  const statusBadge = page.getByTestId("booking-status-badge");
+  await expect(statusBadge).toHaveText("PENDIENTE");
 
   // Cancel booking
   page.once("dialog", async (dialog) => {
@@ -44,5 +45,5 @@ test("a customer completes the critical public booking flow", async ({ page }) =
   await page.getByRole("button", { name: "Cancelar reserva" }).click();
 
   await expect(page.getByText("Tu reserva ha sido cancelada correctamente.")).toBeVisible();
-  await expect(page.getByText("CANCELADA")).toBeVisible();
+  await expect(statusBadge).toHaveText("CANCELADA");
 });

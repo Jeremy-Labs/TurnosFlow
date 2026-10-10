@@ -214,6 +214,7 @@ export function PublicBookingManager({ initialAppointment }: PublicBookingManage
             </h2>
           </div>
           <span
+            data-testid="booking-status-badge"
             className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${statusInfo.badgeClass}`}
           >
             {statusInfo.label}
