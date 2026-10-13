@@ -61,6 +61,12 @@ export default async function CustomerDetailPage({
               >
                 Clientes
               </Link>
+              <Link
+                href={`/dashboard/${business.slug}/configuracion`}
+                className="text-slate-600 transition hover:text-slate-900"
+              >
+                Configuración
+              </Link>
             </div>
           </div>
           <LogoutButton />

@@ -54,6 +54,12 @@ export default async function CustomersPage({
               <span className="text-teal-700 font-semibold border-b-2 border-teal-700 pb-1">
                 Clientes
               </span>
+              <Link
+                href={`/dashboard/${business.slug}/configuracion`}
+                className="text-slate-600 transition hover:text-slate-900"
+              >
+                Configuración
+              </Link>
             </div>
           </div>
           <LogoutButton />

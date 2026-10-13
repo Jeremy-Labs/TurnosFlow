@@ -94,4 +94,53 @@ test("an authenticated user views customers list and appointment history", async
   await expect(appointmentHistoryRow.getByText(/Profesional: Juan/)).toBeVisible();
 });
 
+test("an authenticated user views and updates business settings", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByPlaceholder("Email").fill("demo@turnosflow.local");
+  await page.getByPlaceholder("Contraseña").fill("demo");
+  await page.getByRole("button", { name: "Entrar" }).click();
+  await expect(page).toHaveURL(/\/dashboard\/seleccionar-negocio$/);
+
+  await page.getByRole("link", { name: /Barbería Central/ }).click();
+  await expect(page).toHaveURL(/\/dashboard\/barberia-central$/);
+
+  // Navigate to Configuración via nav link
+  await page.getByRole("link", { name: "Configuración" }).first().click();
+  await expect(page).toHaveURL(/\/dashboard\/barberia-central\/configuracion$/);
+  await expect(
+    page.getByRole("heading", { name: "Configuración del Negocio" })
+  ).toBeVisible();
+
+  // Verify fields are loaded with business values
+  const nameInput = page.getByLabel("Nombre del negocio *");
+  const slugInput = page.getByLabel("Slug (identificador web) *");
+  const timezoneInput = page.getByLabel("Zona horaria *");
+  const phoneInput = page.getByLabel("Teléfono de contacto");
+  const descriptionInput = page.getByLabel("Descripción del negocio");
+
+  await expect(nameInput).toHaveValue("Barbería Central");
+  await expect(slugInput).toHaveValue("barberia-central");
+  await expect(timezoneInput).toHaveValue("Europe/Madrid");
+
+  // Modify phone and description
+  const updatedPhone = "+34 600 999 888";
+  const updatedDescription = "Barbería clásica actualizada para pruebas";
+  await phoneInput.fill(updatedPhone);
+  await descriptionInput.fill(updatedDescription);
+
+  // Submit form
+  await page.getByRole("button", { name: "Guardar cambios" }).click();
+
+  // Verify feedback message
+  await expect(page.getByTestId("settings-success-message")).toBeVisible();
+  await expect(page.getByTestId("settings-success-message")).toHaveText(
+    "Configuración guardada correctamente."
+  );
+
+  // Reload page to verify persistence
+  await page.reload();
+  await expect(phoneInput).toHaveValue(updatedPhone);
+  await expect(descriptionInput).toHaveValue(updatedDescription);
+});
+
 

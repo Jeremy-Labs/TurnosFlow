@@ -26,6 +26,9 @@ export default async function BusinessDashboard({ params }: { params: Promise<{ 
               <Link href={`/dashboard/${business.slug}/clientes`} className="text-slate-600 transition hover:text-slate-900">
                 Clientes
               </Link>
+              <Link href={`/dashboard/${business.slug}/configuracion`} className="text-slate-600 transition hover:text-slate-900">
+                Configuración
+              </Link>
             </div>
           </div>
           <LogoutButton />
