@@ -28,7 +28,7 @@ test("an authenticated user views and filters the admin agenda", async ({ page }
   await expect(page).toHaveURL(/\/dashboard\/barberia-central$/);
 
   // Navigate to Agenda
-  await page.getByRole("link", { name: "Ver agenda completa" }).click();
+  await page.getByRole("link", { name: "Ver agenda completa", exact: true }).click();
   await expect(page).toHaveURL(/\/dashboard\/barberia-central\/agenda$/);
   await expect(page.getByRole("heading", { name: "Agenda de turnos" })).toBeVisible();
 
@@ -162,7 +162,7 @@ test("an authenticated user views operational metrics on dashboard", async ({ pa
   await expect(page.getByText("Esta semana")).toBeVisible();
 
   await expect(page.getByTestId("kpi-customers")).toBeVisible();
-  await expect(page.getByText("Clientes", { exact: true })).toBeVisible();
+  await expect(page.getByTestId("kpi-customers").getByText("Clientes")).toBeVisible();
 
   // Verify status cards
   await expect(page.getByTestId("kpi-status-confirmed")).toBeVisible();
