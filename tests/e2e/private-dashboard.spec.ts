@@ -143,4 +143,44 @@ test("an authenticated user views and updates business settings", async ({ page 
   await expect(descriptionInput).toHaveValue(updatedDescription);
 });
 
+test("an authenticated user views operational metrics on dashboard", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByPlaceholder("Email").fill("demo@turnosflow.local");
+  await page.getByPlaceholder("Contraseña").fill("demo");
+  await page.getByRole("button", { name: "Entrar" }).click();
+  await expect(page).toHaveURL(/\/dashboard\/seleccionar-negocio$/);
+
+  await page.getByRole("link", { name: /Barbería Central/ }).click();
+  await expect(page).toHaveURL(/\/dashboard\/barberia-central$/);
+  await expect(page.getByRole("heading", { name: "Barbería Central" })).toBeVisible();
+
+  // Verify primary KPI cards
+  await expect(page.getByTestId("kpi-today")).toBeVisible();
+  await expect(page.getByText("Turnos de hoy")).toBeVisible();
+
+  await expect(page.getByTestId("kpi-week")).toBeVisible();
+  await expect(page.getByText("Esta semana")).toBeVisible();
+
+  await expect(page.getByTestId("kpi-customers")).toBeVisible();
+  await expect(page.getByText("Clientes", { exact: true })).toBeVisible();
+
+  // Verify status cards
+  await expect(page.getByTestId("kpi-status-confirmed")).toBeVisible();
+  await expect(page.getByText("Confirmados")).toBeVisible();
+
+  await expect(page.getByTestId("kpi-status-completed")).toBeVisible();
+  await expect(page.getByText("Completados")).toBeVisible();
+
+  await expect(page.getByTestId("kpi-status-cancelled")).toBeVisible();
+  await expect(page.getByText("Cancelaciones")).toBeVisible();
+
+  await expect(page.getByTestId("kpi-status-noshow")).toBeVisible();
+  await expect(page.getByText("No-shows")).toBeVisible();
+
+  // Verify upcoming appointments section
+  await expect(
+    page.getByRole("heading", { name: "Próximos turnos inmediatos" })
+  ).toBeVisible();
+});
+
 

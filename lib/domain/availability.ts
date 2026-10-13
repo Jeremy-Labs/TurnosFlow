@@ -50,6 +50,36 @@ export function getBusinessDayBounds(date: string, timezone: string) {
   return { startAt: toUtcFromBusinessTime(date, "00:00", timezone), endAt: toUtcFromBusinessTime(nextBusinessDate(date), "00:00", timezone) };
 }
 
+export type BusinessWeekBounds = {
+  startAt: Date;
+  endAt: Date;
+  monday: string;
+  sunday: string;
+};
+
+export function getBusinessWeekBounds(date: string, timezone: string): BusinessWeekBounds {
+  assertBusinessDate(date);
+  assertIanaTimezone(timezone);
+  const parsed = new Date(`${date}T12:00:00Z`);
+  const dayOfWeek = parsed.getUTCDay();
+  const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  const monday = new Date(parsed);
+  monday.setUTCDate(parsed.getUTCDate() - diffToMonday);
+  const mondayDate = monday.toISOString().slice(0, 10);
+  const sunday = new Date(monday);
+  sunday.setUTCDate(monday.getUTCDate() + 6);
+  const sundayDate = sunday.toISOString().slice(0, 10);
+  const nextMonday = new Date(monday);
+  nextMonday.setUTCDate(monday.getUTCDate() + 7);
+  const nextMondayDate = nextMonday.toISOString().slice(0, 10);
+  return {
+    startAt: toUtcFromBusinessTime(mondayDate, "00:00", timezone),
+    endAt: toUtcFromBusinessTime(nextMondayDate, "00:00", timezone),
+    monday: mondayDate,
+    sunday: sundayDate,
+  };
+}
+
 export function businessDateFromInstant(instant: Date, timezone: string) {
   assertIanaTimezone(timezone);
   const parts = partsAt(instant, timezone);
