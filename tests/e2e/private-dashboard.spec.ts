@@ -162,7 +162,7 @@ test("an authenticated user views operational metrics on dashboard", async ({ pa
   await expect(page.getByText("Esta semana")).toBeVisible();
 
   await expect(page.getByTestId("kpi-customers")).toBeVisible();
-  await expect(page.getByTestId("kpi-customers").getByText("Clientes")).toBeVisible();
+  await expect(page.getByTestId("kpi-customers").getByText("Clientes", { exact: true })).toBeVisible();
 
   // Verify status cards
   await expect(page.getByTestId("kpi-status-confirmed")).toBeVisible();
