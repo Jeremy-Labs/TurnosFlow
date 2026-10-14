@@ -166,16 +166,16 @@ test("an authenticated user views operational metrics on dashboard", async ({ pa
 
   // Verify status cards
   await expect(page.getByTestId("kpi-status-confirmed")).toBeVisible();
-  await expect(page.getByText("Confirmados")).toBeVisible();
+  await expect(page.getByTestId("kpi-status-confirmed").getByText("Confirmados")).toBeVisible();
 
   await expect(page.getByTestId("kpi-status-completed")).toBeVisible();
-  await expect(page.getByText("Completados")).toBeVisible();
+  await expect(page.getByTestId("kpi-status-completed").getByText("Completados")).toBeVisible();
 
   await expect(page.getByTestId("kpi-status-cancelled")).toBeVisible();
-  await expect(page.getByText("Cancelaciones")).toBeVisible();
+  await expect(page.getByTestId("kpi-status-cancelled").getByText("Cancelaciones")).toBeVisible();
 
   await expect(page.getByTestId("kpi-status-noshow")).toBeVisible();
-  await expect(page.getByText("No-shows")).toBeVisible();
+  await expect(page.getByTestId("kpi-status-noshow").getByText("No-shows")).toBeVisible();
 
   // Verify upcoming appointments section
   await expect(
